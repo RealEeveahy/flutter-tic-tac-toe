@@ -1,5 +1,31 @@
 //import 'dart:io';
 //import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
+import 'main.dart';
+
+UserControls controls = UserControls();
+Match currentMatch = Match(); 
+
+///
+/// Defines logic that is interacted with through the user interface.
+/// This includes menu choices and gameplay
+///
+class UserControls {
+  void PlayerSelected(bool ai, var context)
+  {
+    if (ai) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const DifficultyScreen()));
+    }
+    else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));
+    }
+  }
+  void DifficultySelected(int d, var context)
+  {
+    currentMatch.AIPlayer = ArtificialPlayer(d);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));
+  }
+}
 
 ///
 /// Defines logic for a stand-alone match
@@ -9,6 +35,7 @@
 class Match {
   bool p1turn = true;
   bool p2AI = false;
+  ArtificialPlayer? AIPlayer;
 }
 
 ///

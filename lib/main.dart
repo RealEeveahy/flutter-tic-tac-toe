@@ -1,23 +1,108 @@
 import 'package:flutter/material.dart';
+import 'game.dart';
 
 void main() {
-  runApp(
-    MaterialApp(
-      home: Scaffold(
+  runApp(MaterialApp(home: MainScreen()));
+}
+
+class MainScreen extends StatelessWidget {
+  const MainScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         appBar: AppBar(
           title: Text('Tic-Tac-Toe'),
         ),
 
-        // The body of the screen appears below the AppBar.
-        // Since there's no Center widget wrapping this,
-        // the text will be aligned to the top-left by default.
-        body: Text(
-          'Dice and Dungeons!',
-          // TextStyle allows us to change how the text looks.
-          // Here we set the font size to 24.
-          style: TextStyle(fontSize: 24),
+        body: ListView(
+          children: [
+            OutlinedButton(
+                onPressed: () {
+                  controls.PlayerSelected(false, context);
+                },
+                style: ButtonStyle( shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),),
+                child : Text('Vs Player 2')
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  controls.PlayerSelected(true, context);
+                },
+                style: ButtonStyle( shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),),
+                child : Text('Vs Computer')
+              ),
+          ],
+        )
+      );
+  }
+}
+
+class DifficultyScreen extends StatelessWidget {
+  const DifficultyScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Tic-Tac-Toe'),
         ),
-      ),
-    ),
-  );
+
+        body: ListView(
+          children: [
+            OutlinedButton(
+                onPressed: () {
+                  controls.DifficultySelected(0, context);
+                },
+                style: ButtonStyle( shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),),
+                child : Text('Easy')
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  controls.DifficultySelected(1, context);
+                },
+                style: ButtonStyle( shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),),
+                child : Text('Medium')
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  controls.DifficultySelected(2, context);
+                },
+                style: ButtonStyle( shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),),
+                child : Text('Hard')
+              )
+          ],
+        )
+      );
+  }
+}
+
+class GameScreen extends StatelessWidget {
+  const GameScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Tic-Tac-Toe'),
+        ),
+
+        body: GridView.count(
+          crossAxisCount: 3,
+          children: List.generate(9, (index) {
+            return Center(
+              child: OutlinedButton(
+                onPressed: () {
+
+                },
+                style: ButtonStyle(
+                  shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+                  ),
+                child : Text('Item $index')
+              )
+            );
+          })
+        )
+      );
+  }
+
 }
