@@ -3,8 +3,9 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 
+//instantiate the user controls and game session classes
 UserControls controls = UserControls();
-Match currentMatch = Match(); 
+PlayerSession game = PlayerSession();
 
 ///
 /// Defines logic that is interacted with through the user interface.
@@ -17,13 +18,65 @@ class UserControls {
       Navigator.push(context, MaterialPageRoute(builder: (context) => const DifficultyScreen()));
     }
     else {
+      game.currentMatch = Match();
       Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));
     }
   }
   void DifficultySelected(int d, var context)
   {
-    currentMatch.AIPlayer = ArtificialPlayer(d);
+    //insantiate a match with the ai of selected difficulty
+    game.currentMatch = Match.aiMatch(ArtificialPlayer(d));
     Navigator.push(context, MaterialPageRoute(builder: (context) => const GameScreen()));
+  }
+  void GameSquareClicked(GameSquare clicked, var context)
+  {
+    if(clicked.isEmpty())
+    {
+      clicked.content;
+    }
+  }
+}
+
+///
+/// Defines the logic for a game session
+/// including instantiating necessary variables and storing current information.
+/// 
+class PlayerSession {
+  Match? currentMatch;
+  PlayerData? data;
+  //store each game square in a format that may be referred to by other classes
+  var grid = <(int,int),GameSquare>{};
+
+  //constructor should be parsed save data if any is found. create a new playerdata if one does not exist
+  PlayerSession()
+  {
+    //initialise new player data
+    data = PlayerData(0, 0, 0);
+
+    // //initialise the game grid
+    // for(int x = 1; x <= 3; x++)
+    // {
+    //   for(int y = 1; y <= 3; y++)
+    //   {
+    //     grid[(x,y)] = GameSquare(x, y);
+    //   }
+    // }
+  }
+  PlayerSession.ExistingSession(PlayerData file)
+  {
+    data = file;
+  }
+  void AddToGrid(int x, int y, GameSquare sq)
+  {
+    grid[(x,y)] = sq;
+  }
+  /// Clear all the squares within a game grid
+  void ClearAll()
+  {
+    grid.forEach((key, value) {
+        value.SetContent("");
+      }
+    );
   }
 }
 
@@ -34,8 +87,11 @@ class UserControls {
 ///
 class Match {
   bool p1turn = true;
-  bool p2AI = false;
   ArtificialPlayer? AIPlayer;
+  List<Move> moveLog = List.empty(growable: true);
+
+  Match();
+  Match.aiMatch(this.AIPlayer);
 }
 
 ///
@@ -48,44 +104,48 @@ class PlayerData {
 }
 
 ///
-/// Initializes and stores the game grid
-///
-class GameGrid {
-  var grid = Map<(int,int),GameSquare>();
-
-  /// Initialize and populate the grid
-  GameGrid()
-  {
-    for(int x = 0; x <= 2; x++)
-    {
-      for(int y = 0; y <= 2; y++)
-      {
-        grid[(x,y)] = GameSquare(x, y);
-      }
-    }
-  }
-
-  /// Clear all the squares within a game grid
-  void ClearAll()
-  {
-    grid.forEach((key, value) {
-        value.SetContent("");
-      }
-    );
-  }
-}
-
-///
 /// Defines logic for a game-square, for which there will be 9
 /// This includes the position, content, and win-condition checks of the square
 /// 
 class GameSquare {
   (int,int)? position;
   String content = "";
+  //OutlinedButton? myButton;
+  //ButtonText? textWidget;
+  GameButton? myButton;
 
-  GameSquare(int xPosition, int yPosition)
+  // constructor is called in the gridview method of the GameScreen widget such that the squares are made when the 
+  // screen is
+  GameSquare(int index, BuildContext context)
   {
-    position = (xPosition, yPosition);
+    // get the position of the square from the index. this was the easiest way i could think
+    // of using simply the index
+    int x=0,y=0,subindex=index;
+    while(subindex > 3)
+    {
+      subindex -=3;
+      y+=1;
+    }
+    x=subindex; //x is the remainder after removing each row
+    position = (x, y);
+
+    //create the textwidget beforehand such that it can be referred to by other methods within the class
+    //textWidget = ButtonText();
+
+    //Create the button
+    // myButton = OutlinedButton(
+    //   onPressed: () {      
+    //     controls.GameSquareClicked(this, context);
+    //   },
+    //   style: ButtonStyle(
+    //     shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+    //   ),
+    //   child : textWidget
+    // );
+
+    myButton = GameButton();
+
+    game.AddToGrid(x,y,this);
   }
   void SetContent(String newContent)
   {

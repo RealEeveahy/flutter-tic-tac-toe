@@ -90,19 +90,46 @@ class GameScreen extends StatelessWidget {
           crossAxisCount: 3,
           children: List.generate(9, (index) {
             return Center(
-              child: OutlinedButton(
-                onPressed: () {
-
-                },
-                style: ButtonStyle(
-                  shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-                  ),
-                child : Text('Item $index')
-              )
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child : GameSquare(index, context).myButton
+            ),
             );
           })
         )
       );
   }
 
+}
+
+class GameButton extends StatefulWidget {
+  const GameButton({super.key});
+
+  @override
+  State<GameButton> createState() => _ButtonTextState();
+}
+
+class _ButtonTextState extends State<GameButton> {
+  String content = 'X';
+
+  void changeContent(String newContent)
+  {
+    content = newContent;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: () {      
+        setState(() {
+          content;
+        });
+      },
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+      ),
+      child : Text(content)
+    );
+  }
 }
