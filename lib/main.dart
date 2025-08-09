@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'game.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MaterialApp(home: MainScreen()));
@@ -86,17 +87,23 @@ class GameScreen extends StatelessWidget {
           title: Text('Tic-Tac-Toe'),
         ),
 
-        body: GridView.count(
-          crossAxisCount: 3,
-          children: List.generate(9, (index) {
-            return Center(
-              child: SizedBox(
-                width: 200,
-                height: 200,
-                child : GameSquare(index, context).myButton
-            ),
-            );
-          })
+
+        body: SizedBox(
+          width: 300,
+          child: GridView.count(
+            crossAxisCount: 3,
+            padding: EdgeInsets.zero,
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 0,
+            childAspectRatio: 1,
+            children: List.generate(9, (index) {
+              return SizedBox(
+                width: 100,
+                height: 100,
+                child: GameSquare(index, context).myButton,
+              );
+            }),
+          )
         )
       );
   }
@@ -104,32 +111,42 @@ class GameScreen extends StatelessWidget {
 }
 
 class GameButton extends StatefulWidget {
-  const GameButton({super.key});
+  final GameSquare mySquare;
+  late _GameButtonState currentState;
+
+  GameButton({super.key, required this.mySquare});
 
   @override
-  State<GameButton> createState() => _ButtonTextState();
+  // ignore: no_logic_in_create_state
+  State createState() {
+    currentState = _GameButtonState();
+    return currentState;
+  }
 }
 
-class _ButtonTextState extends State<GameButton> {
-  String content = 'X';
+/// The state for a GameButton Widget
+class _GameButtonState extends State<GameButton> {
+  String content = "";
 
-  void changeContent(String newContent)
-  {
-    content = newContent;
-  }
+  /// Updates the content of the button. 
+  /// Called indirectly when the button is clicked, as well as by the AI when it makes a move.
+  void updateContent(String newContent) { setState((() { content = newContent; })); }
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () {      
-        setState(() {
-          content;
-        });
+        controls.GameSquareClicked(widget.mySquare, context);
       },
       style: ButtonStyle(
         shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
       ),
-      child : Text(content)
+      child : Text(
+        content,
+        style: TextStyle(
+          fontSize: 50,
+        )
+      )
     );
   }
 }
