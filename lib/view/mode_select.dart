@@ -14,33 +14,34 @@ class ModeSelectScreen extends StatelessWidget {
         ),
 
         body: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 300,
-                height: 300,
-                child: MainButton(
-                    onPressed: () {
-                      nav.ToGame(context);
-                      updateHandler.StartMatch(-1);
-                    },
-                    child : MainTextStyle(content:'Vs Player 2')
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 200,
+                    child: MainButton(
+                        onPressed: () {
+                          nav.ToGame(context);
+                          updateHandler.StartMatch(-1);
+                        },
+                        child : MainTextStyle(content:'Vs Player 2')
+                      ),
                   ),
-              ),
-              SizedBox(width: 50),
-              SizedBox(
-                width: 300,
-                height: 300,
-                child: MainButton(
-                  onPressed: () {
-                    nav.DifficultySelect(context);
-                  },
-                  child : MainTextStyle(content:'Vs Computer')
-                ),
+                  SizedBox(width: 50),
+                  SizedBox(
+                    height: 200,
+                    child: MainButton(
+                      onPressed: () {
+                        nav.DifficultySelect(context);
+                      },
+                      child : MainTextStyle(content:'Vs Computer')
+                    ),
+                  )
+                ],
               )
-            ],
-          )
+            )
         )
       );
   }

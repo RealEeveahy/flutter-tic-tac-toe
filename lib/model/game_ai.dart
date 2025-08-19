@@ -1,5 +1,7 @@
-import '../game.dart';
 import 'dart:math'; //for random number generation
+import 'round.dart';
+import 'session.dart';
+
 
 // insantiate random number generator
 var rng = Random();
@@ -43,7 +45,7 @@ class ArtificialPlayer {
   {
     int randomX = rng.nextInt(3), randomY = rng.nextInt(3);
 
-    while(!game.grid[(randomX, randomY)]!.isEmpty())
+    while(!game.GetGrid()[(randomX, randomY)]!.isEmpty())
     {
       randomX = rng.nextInt(3);
       randomY = rng.nextInt(3);
@@ -61,7 +63,7 @@ class ArtificialPlayer {
     {
       return (1, 1);
     }
-    else if(game.grid[(1,1)]!.isEmpty()) // if the centre square is empty, place there
+    else if(game.GetGrid()[(1,1)]!.isEmpty()) // if the centre square is empty, place there
     {
       return (1, 1);
     }  
@@ -81,9 +83,9 @@ class ArtificialPlayer {
   void AIMove()
   {
     // get a move and register it in the grid  
-    game.grid[(ChooseMove())]!.RegisterMove("O");
+    game.GetGrid()[(ChooseMove())]!.RegisterMove("O");
 
     //swap the turn back to player 1
-    game.currentMatch!.p1turn = !game.currentMatch!.p1turn;
+    game.currentRound!.p1turn = !game.currentRound!.p1turn;
   }
 }
