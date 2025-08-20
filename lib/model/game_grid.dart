@@ -38,13 +38,11 @@ class GameGrid {
       {
         return Read(x,0);
       }
-      print("\n Entry at: ${(x,0)} = ${grid[(x,0)].content} \n Entry at: ${(x,1)} = ${grid[(x,1)].content} \n Entry at: ${(x,2)} = ${grid[(x,2)].content}");
       //check horizontals
       if(Read(0,x) == Read(1,x) && Read(1,x) == Read(2,x))
       {
         return Read(0,x);
       }
-      print("\n Entry at: ${(0,x)} = ${grid[(0,x)].content} \n Entry at: ${(1,x)} = ${grid[(1,x)].content} \n Entry at: ${(2,x)} = ${grid[(2,x)].content}");
       x++;
     }
 
@@ -94,7 +92,7 @@ class GameSquare {
   /// Register a move to the moveLog AND update the content of the button
   void RegisterMove(String player)
   {
-    game.currentRound!.moveLog.add(Move(this, player));
+    game.currentRound.moveLog.add(Move(this, player));
     SetContent(player);
   }
 

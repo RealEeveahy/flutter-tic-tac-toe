@@ -1,5 +1,4 @@
 import 'dart:math'; //for random number generation
-import 'round.dart';
 import 'session.dart';
 
 
@@ -45,7 +44,7 @@ class ArtificialPlayer {
   {
     int randomX = rng.nextInt(3), randomY = rng.nextInt(3);
 
-    while(!game.GetGrid()[(randomX, randomY)]!.isEmpty())
+    while(game.grid.Read(randomX, randomY) != "")
     {
       randomX = rng.nextInt(3);
       randomY = rng.nextInt(3);
@@ -85,7 +84,10 @@ class ArtificialPlayer {
     // get a move and register it in the grid  
     game.GetGrid()[(ChooseMove())]!.RegisterMove("O");
 
-    //swap the turn back to player 1
-    game.currentRound!.p1turn = !game.currentRound!.p1turn;
+    //swap the turn back to player 1 if the Ai did not win this turn
+    if(!game.currentRound.GameFinished())
+    {
+      game.currentRound.p1turn = !game.currentRound.p1turn;
+    }
   }
 }

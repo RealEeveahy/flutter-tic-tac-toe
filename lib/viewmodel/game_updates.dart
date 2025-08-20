@@ -1,5 +1,4 @@
 import 'package:tic_tac_toe/view/win_label.dart';
-
 import '../view/game_button.dart';
 import '../model/round.dart';
 import '../model/game_ai.dart';
@@ -34,20 +33,20 @@ class GameUpdates
   void SquareClicked(SquarePointer sq, BuildContext context)
   {
       //if the square is empty, register the players move, else do nothing
-      if(sq.model.isEmpty() && game.currentRound!.playerCanMove())
+      if(sq.model.isEmpty() && game.currentRound.playerCanMove())
       {
         //register a new move with the appropriate player
-        sq.model.RegisterMove(game.currentRound!.p1turn ? "X" : "O");
+        sq.model.RegisterMove(game.currentRound.p1turn ? "X" : "O");
 
         if(!game.currentRound.GameFinished()) // switch the turn if the game has not finished yet
         {
           //toggle the turn to the other player
-          game.currentRound!.p1turn = !game.currentRound!.p1turn; 
+          game.currentRound.p1turn = !game.currentRound.p1turn; 
 
           //if the second player is ai, automatically make a move
-          if(game.currentRound!.AIPlayer != null) 
+          if(game.currentRound.AIPlayer != null) 
           {
-            game.currentRound!.AIPlayer!.AIMove();
+            game.currentRound.AIPlayer!.AIMove();
           }
         }
       }
@@ -56,6 +55,20 @@ class GameUpdates
   void SquareChanged(String newString, GameButton square)
   {
     square.currentState.updateContent(newString); // update the button to display the new content
+  }
+
+  void RestartClicked()
+  {
+    game.RestartRound();
+  }
+
+  void UndoClicked()
+  {
+    //check that at least one move has been made, and the ai is not currently making a turn, and the game has not finished
+    if(game.currentRound.moveLog.isNotEmpty && game.currentRound.playerCanMove())
+    {
+      game.currentRound.UndoMove();
+    }
   }
 
   void WinnerChanged(String winner)

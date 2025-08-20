@@ -10,6 +10,7 @@ import 'game_grid.dart';
 ///
 class GameRound {
   bool p1turn = true;
+  bool roundComplete = false;
   ArtificialPlayer? AIPlayer;
   List<Move> moveLog = List.empty(growable: true);
 
@@ -18,15 +19,14 @@ class GameRound {
 
   bool GameFinished()
   {
-    print("\n Checking for a winner...");
     if(moveLog.length == 9) //grid has been filled
     {
       String check = game.grid.CheckForWin();
       if(check != "")
       {
         //if any player has won on the 9th move, return true and complete regular game won behaviour
-        print("$check wins in ${game.currentRound.moveLog.length} moves. \n");
         updateHandler.WinnerChanged(check);
+        roundComplete = true;
         return true;
       }
       else
@@ -40,8 +40,8 @@ class GameRound {
       String check = game.grid.CheckForWin();
       if(check != "") // a winner is found
       {
-        print("$check wins in ${game.currentRound.moveLog.length} moves. \n");
         updateHandler.WinnerChanged(check);
+        roundComplete = true;
         return true;
       }
       else { print("\n No winner found."); return false; } //no winner yet
@@ -55,7 +55,12 @@ class GameRound {
 
   bool playerCanMove()
   {
-    if(p1turn && game.currentRound.AIPlayer != null) {
+    if(roundComplete)
+    {
+      //game is finished, moves cannot be made 
+      return false;
+    }
+    else if(p1turn && game.currentRound.AIPlayer != null) {
       //player 1's turn, player 2 is ai
       return true;
     }
@@ -66,6 +71,26 @@ class GameRound {
     else {
       //player 2's turn, player 2 is ai
       return false;
+    }
+  }
+
+  void UndoMove()
+  {
+    moveLog.last.sq.SetContent(""); //Set the content of the last assigned square to empty
+    moveLog.removeLast(); //pop it from the move log
+
+    //repeat the same logic again if player 2 is ai.
+    //first run will remove the ai's move, second will remove the players
+    if(AIPlayer != null)
+    {
+      moveLog.last.sq.SetContent("");
+      moveLog.removeLast();
+    }
+    else{
+      //flip the turn back to the person who made the undo. 
+      //this shouldn't be necessary in a vs ai game because the action removes the last two moves and
+      //can only be used on the players turn, therefore already being in the correct conditions
+      game.currentRound.p1turn = !game.currentRound.p1turn; 
     }
   }
 }

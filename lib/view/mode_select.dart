@@ -16,8 +16,7 @@ class ModeSelectScreen extends StatelessWidget {
         body: Center(
           child: FractionallySizedBox(
             widthFactor: 0.8,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: ListView(
                 children: [
                   SizedBox(
                     height: 200,
@@ -29,7 +28,7 @@ class ModeSelectScreen extends StatelessWidget {
                         child : MainTextStyle(content:'Vs Player 2')
                       ),
                   ),
-                  SizedBox(width: 50),
+                  SizedBox(height: 50),
                   SizedBox(
                     height: 200,
                     child: MainButton(

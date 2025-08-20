@@ -39,13 +39,21 @@ class GameScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   MainButton(
+                    onPressed: () => {
+                      updateHandler.UndoClicked()
+                    },
                     child: Text("Undo")
                     ),
+                  SizedBox(width: 50,),
                   MainButton(
+                    onPressed: () => {
+                      updateHandler.RestartClicked()
+                    },
                     child: Text("Restart")
                     )
                 ],
               ),
+              SizedBox(height: 50,),
               updateHandler.generateWinLabel(),
             ]
           )

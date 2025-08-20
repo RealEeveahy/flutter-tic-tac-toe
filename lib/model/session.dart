@@ -1,5 +1,6 @@
 //This file will be (somewhat) treated as global variable storage
-import 'package:tic_tac_toe/model/game_grid.dart';
+import 'game_grid.dart';
+import '../viewmodel/game_updates.dart';
 import 'round.dart';
 
 // instantiate the user controls and game session classes
@@ -30,6 +31,18 @@ class PlayerSession {
   Map GetGrid()
   {
     return grid.grid;
+  }
+
+  void RestartRound()
+  {
+    //reset the grid
+    grid.ClearAll();
+
+    updateHandler.WinnerChanged("");
+
+    //start a new round, carry over the same AI settings
+    if(currentRound.AIPlayer == null) { currentRound = GameRound(); }
+    else { currentRound = GameRound.aiMatch(currentRound.AIPlayer); }
   }
 }
 
