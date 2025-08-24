@@ -60,11 +60,11 @@ class GameRound {
       //game is finished, moves cannot be made 
       return false;
     }
-    else if(p1turn && game.currentRound.AIPlayer != null) {
+    else if(p1turn && AIPlayer != null) {
       //player 1's turn, player 2 is ai
       return true;
     }
-    else if(game.currentRound.AIPlayer == null) {
+    else if(AIPlayer == null) {
       //both players are human - player should always have control
       return true;
     }

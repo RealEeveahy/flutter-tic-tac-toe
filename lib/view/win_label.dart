@@ -6,6 +6,7 @@ class WinLabel extends StatefulWidget {
 
   @override
   State createState()
+  // ignore: no_logic_in_create_state
   {
     myState=_WinLabelState();
     return myState;

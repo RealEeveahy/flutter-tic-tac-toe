@@ -78,7 +78,7 @@ class GameUpdates
 
   WinLabel generateWinLabel()
   {
-    winnerLabel = new WinLabel();
+    winnerLabel = WinLabel();
     return winnerLabel;
   }
 }

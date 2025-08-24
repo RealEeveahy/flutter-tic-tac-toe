@@ -66,13 +66,26 @@ class GameGrid {
 /// -- Instantiated as part of the game screen code, not on entry
 /// 
 class GameSquare {
-  (int,int)? position;
+  late (int,int) position;
   String content = "";
   late SquarePointer parent;
 
   // constructor is called in the gridview method of the GameScreen widget such that the squares are made when the 
   // screen is loaded
   GameSquare(int index, this.parent)
+  {
+    position=GetPosition(index);
+    game.grid.AddToGrid(position.$1,position.$2,this); // add the square to the game grid
+  }
+
+  // constructor for unit testing
+  GameSquare.noUI(int index, GameGrid grid)
+  {
+    position=GetPosition(index);
+    grid.AddToGrid(position.$1,position.$2,this); // add the square to the game grid
+  }
+
+  (int,int) GetPosition(int index)
   {
     // get the position of the square from the index. this was the easiest way i could think
     // of using simply the index
@@ -83,10 +96,7 @@ class GameSquare {
       y+=1;
     }
     x=subindex; // x is the remainder after removing each row
-    position = (x, y); // store the position within the square for reference
-
-    print("Adding a square to grid at: ${(x,y)}");
-    game.grid.AddToGrid(x,y,this); // add the square to the game grid
+    return (x, y); // store the position within the square for reference
   }
   
   /// Register a move to the moveLog AND update the content of the button
