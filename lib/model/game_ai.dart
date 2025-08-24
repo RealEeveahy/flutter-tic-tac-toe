@@ -42,14 +42,12 @@ class ArtificialPlayer {
 
   (int,int) GetRandomMove()
   {
-    int randomX = rng.nextInt(3), randomY = rng.nextInt(3);
-
-    while(game.grid.Read(randomX, randomY) != "")
-    {
-      randomX = rng.nextInt(3);
-      randomY = rng.nextInt(3);
-    }
-    return (randomX, randomY);
+    List<(int,int)> empties = List.empty(growable: true);
+    game.GetGrid().forEach((key, value) {
+        if(value.content == "") empties.add(key);
+      }
+    );
+    return empties[rng.nextInt(empties.length)];
   }
 
   (int,int) GetStrategicMove()
@@ -58,9 +56,9 @@ class ArtificialPlayer {
     {
       return storedPosition;
     }
-    else if(difficulty ==0) // if there is a move that creates two lines of two, place there
+    else if(TwoLines()) // if there is a move that creates two lines of two, place there
     {
-      return (1, 1);
+      return storedPosition;
     }
     else if(game.GetGrid()[(1,1)]!.isEmpty()) // if the centre square is empty, place there
     {
@@ -122,6 +120,91 @@ class ArtificialPlayer {
       else return false;
     }
   }
+  bool TwoLines()
+  {
+    List<(int,int)> owned = List.empty(growable: true);
+    List<(int,int)> empties = List.empty(growable: true);
+    game.GetGrid().forEach((key, value) {
+        if(value.content == "O") owned.add(key);
+        if(value.content == "") empties.add(key);
+      }
+    );
+
+    //returns early if the ai has not placed 2 moves - would be impossible to create two lines of two
+    if(owned.length < 2) return false;
+    else {
+      List<(int,int)> playable = List.empty(growable: true);
+
+      /// Logic here:
+      /// a given empty square is considered 'playable' if 2+ of its axes meet the following conditions:
+      /// The axis contains 1 'O' and 0 'X's.
+      /// A row will never be a 'row of two' if the opponent has played in that row.
+      for(final e in empties)
+      {
+        int horizontal=0, vertical=0, diagonal=0;
+
+        horizontal += TwoLinesHelper(e, 'x');
+        vertical += TwoLinesHelper(e, 'y');
+        diagonal += TwoLinesHelper(e, 'z');
+
+        if((horizontal + vertical + diagonal) > 1)
+        {
+          playable.add(e);
+        }
+      }
+      if(playable.isNotEmpty)
+      {
+        storedPosition = playable[rng.nextInt(playable.length)];
+        return true;
+      }
+      else return false;
+    }
+  }
+  int TwoLinesHelper((int,int) sq, String axis)
+  {
+    String c1="",c2="",c3="";
+    if(axis=='x')
+    {
+      c1 = game.GetGrid()[(0,sq.$2)];
+      c2 = game.GetGrid()[(1,sq.$2)];
+      c3 = game.GetGrid()[(2,sq.$2)];
+    }
+    else if(axis=='y')
+    {
+      c1 = game.GetGrid()[(sq.$1,0)];
+      c2 = game.GetGrid()[(sq.$1,1)];
+      c3 = game.GetGrid()[(sq.$1,2)];
+    }
+    else if(axis=='z')
+    {
+      if(sq != (1,1)) //regular diagonals logic
+      {
+        if(sq.$1 == 1 || sq.$2 == 1) return 0; // early exit if square is not a corner - does not have a diagonal
+        else {
+          c1 = game.GetGrid()[(sq)];
+          c2 = game.GetGrid()[(1,1)];
+          c3 = game.GetGrid()[GetOppositeCorner(sq)];
+        }
+      }
+      else //centre square logic (2 diagonals) - only logic route where 2 'TwoLines' may be found with 1 scan
+      {
+        int diagonals = 0;
+        //diagonal 1
+        if( (game.GetGrid()[(0,0)] != 'X' && game.GetGrid()[(2,2)] != 'X') &&
+          (game.GetGrid()[(0,0)] == 'O' || game.GetGrid()[(2,2)] == 'O')) 
+          diagonals++;
+        //diagonal 2
+        if( (game.GetGrid()[(0,2)] != 'X' && game.GetGrid()[(2,0)] != 'X') &&
+          (game.GetGrid()[(0,2)] == 'O' || game.GetGrid()[(2,0)] == 'O')) 
+          diagonals++;
+
+        return diagonals;
+      }
+    }
+    if(c1=='X' || c2=='X' || c3=='X') return 0; //return early if any square in the current check is owned by player 1
+    else if(c1=='O' || c2=='O' || c3=='O') return 1; //'mark' the axis if it contains an AI owned square
+    else return 0; //for cases where the row is entirely empty - does not fit this criteria
+  }
   bool CheckCorners()
   {
     //sort the corners by occupied and empty
@@ -140,10 +223,7 @@ class ArtificialPlayer {
         if(game.grid.Read(e.$1, e.$2) == "O")
         {
           //if an occupied corner is owned by the ai, remove it's opposite from the selection pool
-          int oX=0, oY=0;
-          if(e.$1 == 0) oX = 2;
-          if(e.$2 == 0) oY = 2;
-          (int,int) oppositeCorner = (oX,oY);
+          (int,int) oppositeCorner = GetOppositeCorner(e);
           
           if(opposites.contains(oppositeCorner)) opposites.remove(oppositeCorner);
         }
@@ -160,5 +240,13 @@ class ArtificialPlayer {
         return true;
       }
     }
+  }
+  //Maybe out of place in the AI class? rotates a corner position 180 degrees
+  (int,int) GetOppositeCorner((int,int) corner)
+  {
+    int oX=0, oY=0;
+    if(corner.$1 == 0) oX = 2;
+    if(corner.$2 == 0) oY = 2;
+    return (oX,oY);
   }
 }
