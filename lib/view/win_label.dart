@@ -17,10 +17,13 @@ class _WinLabelState extends State<WinLabel>
 {
   String content = "";
   bool isVisible = false;
-  void updateContent(String newContent) { setState(() {
-    content = newContent;
-    if (newContent == "") {isVisible=false;}
-    else {isVisible=true;}
+  void updateContent(String result) { setState(() {
+    if (result == "") {isVisible=false;} //hide the label
+    else {
+      isVisible=true;
+      if(result == "X" || result == "O") content = "'$result' Wins !"; //display winner
+      else content = result; //set label content to draw text
+      }
   });}
 
   @override
@@ -29,7 +32,7 @@ class _WinLabelState extends State<WinLabel>
       height: 50,
       child: Visibility(
         visible: isVisible,
-        child: Text("'$content' Wins !")
+        child: Text(content)
       )
     );
   }

@@ -1,7 +1,7 @@
 import 'package:tic_tac_toe/model/game_ai.dart';
 import 'package:tic_tac_toe/viewmodel/game_updates.dart';
-import '../model/session.dart';
 import 'game_grid.dart';
+import '../main.dart';
 
 ///
 /// Defines logic for a stand-alone match
@@ -25,13 +25,15 @@ class GameRound {
       if(check != "")
       {
         //if any player has won on the 9th move, return true and complete regular game won behaviour
-        updateHandler.WinnerChanged(check);
-        roundComplete = true;
+        RegisterWin(check);
         return true;
       }
       else
       {
         //if no player has won on the 9th move, return true and complete game draw behaviour
+        updateHandler.WinnerChanged("Draw!");
+        roundComplete = true;
+        game.data.Draw();
         return true;
       }
     }
@@ -40,18 +42,23 @@ class GameRound {
       String check = game.grid.CheckForWin();
       if(check != "") // a winner is found
       {
-        updateHandler.WinnerChanged(check);
-        roundComplete = true;
+        RegisterWin(check);
         return true;
       }
-      else { print("\n No winner found."); return false; } //no winner yet
+      else { return false; } //no winner yet
     }
     else // don't check for win if there hasnt been enough moves for either player to win.
     {
-      print("\n Not enough moves yet.");
       return false;
     }
   }
+
+  void RegisterWin(String winner)
+  {
+    updateHandler.WinnerChanged(winner); // set the winner label 
+    winner == "X" ? game.data.Win() : game.data.Lose(); //update player stats
+    roundComplete = true; // prevent more moves from being made
+ }
 
   bool playerCanMove()
   {

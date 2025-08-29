@@ -1,10 +1,12 @@
+import 'package:tic_tac_toe/view/user_data_label.dart';
 import 'package:tic_tac_toe/view/win_label.dart';
 import '../view/game_button.dart';
 import '../model/round.dart';
 import '../model/game_ai.dart';
-import '../model/session.dart';
 import '../model/game_grid.dart';
 import 'package:flutter/material.dart';
+import '../main.dart';
+
 
 GameUpdates updateHandler = GameUpdates();
 
@@ -15,6 +17,34 @@ GameUpdates updateHandler = GameUpdates();
 class GameUpdates 
 {
   late WinLabel winnerLabel;
+  late UserDataLabel wins, losses, draws;
+
+  UserDataLabel NewStatLabel(String name)
+  {
+    if(name=="Wins")
+    {
+      wins = UserDataLabel(labelName: name);
+      return wins;
+    }
+    else if(name=="Losses")
+    {
+      losses = UserDataLabel(labelName: name);
+      return losses;
+    }
+    else
+    {
+      draws = UserDataLabel(labelName: name);
+      return draws;
+    }
+  }
+  /// Update all 3 stat labels on the home screen each time one stat changes / a player's data is loaded
+  void StatsChanged()
+  {
+    wins.countState.updateCount(game.data.wins);
+    losses.countState.updateCount(game.data.losses);
+    draws.countState.updateCount(game.data.draws);
+  }
+
   void StartMatch(int difficulty)
   {
     if(difficulty == -1)
@@ -71,9 +101,9 @@ class GameUpdates
     }
   }
 
-  void WinnerChanged(String winner)
+  void WinnerChanged(String result)
   {
-    winnerLabel.myState.updateContent(winner);
+    winnerLabel.myState.updateContent(result);
   }
 
   WinLabel generateWinLabel()
