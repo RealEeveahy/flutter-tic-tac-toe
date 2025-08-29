@@ -1,6 +1,7 @@
 import '../viewmodel/game_updates.dart';
 import 'round.dart';
-import 'session.dart';
+import '../main.dart';
+
 
 class GameGrid {
   Map grid = <(int,int),GameSquare>{};

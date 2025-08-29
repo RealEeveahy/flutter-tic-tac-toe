@@ -1,5 +1,6 @@
 import 'dart:math'; //for random number generation
-import 'session.dart';
+import '../main.dart';
+
 
 
 // insantiate random number generator
@@ -165,15 +166,15 @@ class ArtificialPlayer {
     String c1="",c2="",c3="";
     if(axis=='x')
     {
-      c1 = game.GetGrid()[(0,sq.$2)];
-      c2 = game.GetGrid()[(1,sq.$2)];
-      c3 = game.GetGrid()[(2,sq.$2)];
+      c1 = game.grid.Read(0,sq.$2);
+      c2 = game.grid.Read(1,sq.$2);
+      c3 = game.grid.Read(2,sq.$2);
     }
     else if(axis=='y')
     {
-      c1 = game.GetGrid()[(sq.$1,0)];
-      c2 = game.GetGrid()[(sq.$1,1)];
-      c3 = game.GetGrid()[(sq.$1,2)];
+      c1 = game.grid.Read(sq.$1,0);
+      c2 = game.grid.Read(sq.$1,1);
+      c3 = game.grid.Read(sq.$1,2);
     }
     else if(axis=='z')
     {
@@ -181,21 +182,22 @@ class ArtificialPlayer {
       {
         if(sq.$1 == 1 || sq.$2 == 1) return 0; // early exit if square is not a corner - does not have a diagonal
         else {
-          c1 = game.GetGrid()[(sq)];
-          c2 = game.GetGrid()[(1,1)];
-          c3 = game.GetGrid()[GetOppositeCorner(sq)];
+          c1 = game.grid.Read(sq.$1,sq.$2);
+          c2 = game.grid.Read(1,1);
+          (int,int) oc = GetOppositeCorner(sq);
+          c3 = game.grid.Read(oc.$1,oc.$2);
         }
       }
       else //centre square logic (2 diagonals) - only logic route where 2 'TwoLines' may be found with 1 scan
       {
         int diagonals = 0;
         //diagonal 1
-        if( (game.GetGrid()[(0,0)] != 'X' && game.GetGrid()[(2,2)] != 'X') &&
-          (game.GetGrid()[(0,0)] == 'O' || game.GetGrid()[(2,2)] == 'O')) 
+        if( (game.grid.Read(0,0) != 'X' && game.grid.Read(2,2) != 'X') &&
+          (game.grid.Read(0,0) == 'O' || game.grid.Read(2,2) == 'O')) 
           diagonals++;
         //diagonal 2
-        if( (game.GetGrid()[(0,2)] != 'X' && game.GetGrid()[(2,0)] != 'X') &&
-          (game.GetGrid()[(0,2)] == 'O' || game.GetGrid()[(2,0)] == 'O')) 
+        if( (game.grid.Read(0,2) != 'X' && game.grid.Read(2,0) != 'X') &&
+          (game.grid.Read(0,2) == 'O' || game.grid.Read(2,0) == 'O')) 
           diagonals++;
 
         return diagonals;

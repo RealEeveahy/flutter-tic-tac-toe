@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'view/home_screen.dart';
+import 'model/session.dart';
 
+PlayerSession game = PlayerSession();
 void main() {
   //load data
   runApp(App());
