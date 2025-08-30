@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class UserDataLabel extends StatelessWidget {
-  UserDataLabel({required this.labelName, super.key});
+  UserDataLabel({required this.labelName, required this.child, super.key});
 
   final String labelName;
-  late _DataCountState countState;
+  Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Row(
         children: [
           Text('$labelName: '),
-          UserDataCount(parent: this),
+          child,
         ],
     );
   }
@@ -19,29 +19,35 @@ class UserDataLabel extends StatelessWidget {
 
 class UserDataCount extends StatefulWidget {
   late _DataCountState myState;
-  UserDataCount({required this.parent, super.key});
+  UserDataCount({required this.initCount,super.key});
 
-  final UserDataLabel parent;
+  final int initCount;
 
   @override
   State createState()
   // ignore: no_logic_in_create_state
   {
     myState=_DataCountState();
-    parent.countState = myState;
     return myState;
   }
 }
 
 class _DataCountState extends State<UserDataCount>
 {
-  int count = 0;
+  int myStat = 0;
+
+  @override
+  void initState() {
+    myStat = widget.initCount;
+    super.initState();
+  }
+
   void updateCount(int setCount) { setState(() {
-    count = setCount;
+    myStat = setCount;
   });}
 
   @override
-  Widget build(BuildContext context) {
-    return Text(count.toString());
+  Widget build(BuildContext context,) {
+    return Text(myStat.toString());
   }
 }

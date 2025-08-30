@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'view/home_screen.dart';
+import 'view/splash.dart';
 import 'model/session.dart';
 
-PlayerSession game = PlayerSession();
-void main() {
-  //load data
+late PlayerSession game;
+void main(){
   runApp(App());
 }
 
@@ -14,7 +13,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp (
-      home: HomeScreen()
+      home: SplashScreen()
     );
   }
 }

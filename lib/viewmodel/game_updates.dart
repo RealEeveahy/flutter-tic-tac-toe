@@ -17,32 +17,36 @@ GameUpdates updateHandler = GameUpdates();
 class GameUpdates 
 {
   late WinLabel winnerLabel;
-  late UserDataLabel wins, losses, draws;
+  late UserDataCount wins, losses, draws;
 
-  UserDataLabel NewStatLabel(String name)
+  Widget NewStatLabel(String name)
   {
+    UserDataCount count;
     if(name=="Wins")
     {
-      wins = UserDataLabel(labelName: name);
-      return wins;
+      count = UserDataCount(initCount:game.data.wins);
+      wins = count;
     }
     else if(name=="Losses")
     {
-      losses = UserDataLabel(labelName: name);
-      return losses;
+      count = UserDataCount(initCount:game.data.losses);
+      losses = count;
     }
     else
     {
-      draws = UserDataLabel(labelName: name);
-      return draws;
+      count = UserDataCount(initCount:game.data.draws);
+      draws = count;
     }
+    UserDataLabel label = UserDataLabel(labelName: name, child: count);
+    return label;
   }
+
   /// Update all 3 stat labels on the home screen each time one stat changes / a player's data is loaded
   void StatsChanged()
   {
-    wins.countState.updateCount(game.data.wins);
-    losses.countState.updateCount(game.data.losses);
-    draws.countState.updateCount(game.data.draws);
+    wins.myState.updateCount(game.data.wins);
+    losses.myState.updateCount(game.data.losses);
+    draws.myState.updateCount(game.data.draws);
   }
 
   void StartMatch(int difficulty)

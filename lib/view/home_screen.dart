@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tic_tac_toe/view/user_data_label.dart';
 import 'package:tic_tac_toe/viewmodel/styles.dart';
 import '../viewmodel/navigation.dart';
 import '../viewmodel/game_updates.dart';

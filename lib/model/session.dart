@@ -1,31 +1,32 @@
 //This file will be (somewhat) treated as global variable storage
+import 'package:shared_preferences/shared_preferences.dart';
 import 'game_grid.dart';
 import '../viewmodel/game_updates.dart';
 import 'round.dart';
-
+import '../main.dart';
 // instantiate the user controls and game session classes
-PlayerSession game = PlayerSession();
 
 ///
 /// Defines the logic for a game session (app instance)
 /// including instantiating necessary variables and storing current information.
 /// 
 class PlayerSession {
-  PlayerData? data;
+  late PlayerData data;
   late GameRound currentRound;
   late GameGrid grid;
   //store each game square in a format that may be referred to by other classes
 
-  //constructor should be parsed save data if any is found. create a new playerdata if one does not exist
   PlayerSession()
   {
-    //initialise new player data
-    data = PlayerData(0, 0, 0);
+    //initialise new player data, if nothing is found in storage, an empty playerdata will be created
+    LoadPlayerData();
+
     grid = GameGrid();
-  }
-  PlayerSession.ExistingSession(PlayerData file)
-  {
-    data = file;
+  }  
+  static Future<PlayerSession> create() async {
+    PlayerSession session = PlayerSession();
+    await Future.delayed(Duration(seconds: 2)); // Simulate async work
+    return session;
   }
   //avoid typing "grid.grid" everywhere
   Map GetGrid()
@@ -44,6 +45,26 @@ class PlayerSession {
     if(currentRound.AIPlayer == null) { currentRound = GameRound(); }
     else { currentRound = GameRound.aiMatch(currentRound.AIPlayer); }
   }
+  Future<void> LoadPlayerData()
+  async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    //get each of the player statistics from the preferences
+    final w = prefs.getInt('wins') ?? 0;
+    final l = prefs.getInt('losses') ?? 0;
+    final d = prefs.getInt('draws') ?? 0;
+
+    data = PlayerData(w, l, d);
+  }
+  Future<void> SavePlayerData()
+  async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    //store each of the player statistics in the preferences
+    await prefs.setInt('wins', data.wins);
+    await prefs.setInt('losses', data.losses);
+    await prefs.setInt('draws', data.draws);
+  }
 }
 
 ///
@@ -53,5 +74,10 @@ class PlayerSession {
 class PlayerData {
   int wins, losses, draws;
   PlayerData(this.wins, this.losses, this.draws);
+
+  //increment the stat counter, save the player data at the same time.
+  void Win(){wins++; game.SavePlayerData();}
+  void Lose(){losses++; game.SavePlayerData();}
+  void Draw(){draws++; game.SavePlayerData();}
 }
 
