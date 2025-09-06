@@ -3,8 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'game_grid.dart';
 import '../viewmodel/game_updates.dart';
 import 'round.dart';
-import '../main.dart';
-// instantiate the user controls and game session classes
+import 'player_data.dart';
 
 ///
 /// Defines the logic for a game session (app instance)
@@ -67,17 +66,5 @@ class PlayerSession {
   }
 }
 
-///
-/// Stores the information that will persist across game sessions
-/// This includes the players win/loss record
-///
-class PlayerData {
-  int wins, losses, draws;
-  PlayerData(this.wins, this.losses, this.draws);
 
-  //increment the stat counter, save the player data at the same time.
-  void Win(){wins++; game.SavePlayerData();}
-  void Lose(){losses++; game.SavePlayerData();}
-  void Draw(){draws++; game.SavePlayerData();}
-}
 

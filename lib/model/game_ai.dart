@@ -153,6 +153,7 @@ class ArtificialPlayer {
           playable.add(e);
         }
       }
+      /// Choose a random marked square to play in
       if(playable.isNotEmpty)
       {
         storedPosition = playable[rng.nextInt(playable.length)];

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/viewmodel/game_updates.dart';
 import 'package:tic_tac_toe/viewmodel/styles.dart';
+import 'package:tic_tac_toe/viewmodel/square_pointer.dart';
+//import 'confetti.dart';
+
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
@@ -11,52 +14,57 @@ class GameScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Tic-Tac-Toe'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 300,
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  padding: EdgeInsets.zero,
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 0,
-                  childAspectRatio: 1,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  children: List.generate(9, (index) {
-                    return SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: SquarePointer(context, index).view,
-                    );
-                  }),
-                )
-              ),
-              SizedBox(height: 50,),
-              Row(
+        body: Stack(
+          children: [
+            //ConfettiMachine(),
+            Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  MainButton(
-                    onPressed: () => {
-                      updateHandler.UndoClicked()
-                    },
-                    child: Text("Undo")
-                    ),
-                  SizedBox(width: 50,),
-                  MainButton(
-                    onPressed: () => {
-                      updateHandler.RestartClicked()
-                    },
-                    child: Text("Restart")
+                  SizedBox(
+                    width: 300,
+                    child: GridView.count(
+                      crossAxisCount: 3,
+                      padding: EdgeInsets.zero,
+                      mainAxisSpacing: 0,
+                      crossAxisSpacing: 0,
+                      childAspectRatio: 1,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      children: List.generate(9, (index) {
+                        return SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: SquarePointer(context, index).view,
+                        );
+                      }),
                     )
-                ],
-              ),
-              SizedBox(height: 50,),
-              updateHandler.generateWinLabel(),
-            ]
-          )
+                  ),
+                  SizedBox(height: 50,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MainButton(
+                        onPressed: () => {
+                          updateHandler.UndoClicked()
+                        },
+                        child: Text("Undo")
+                        ),
+                      SizedBox(width: 50,),
+                      MainButton(
+                        onPressed: () => {
+                          updateHandler.RestartClicked()
+                        },
+                        child: Text("Restart")
+                        )
+                    ],
+                  ),
+                  SizedBox(height: 50,),
+                  updateHandler.generateWinLabel(),
+                ]
+              )
+            ),
+          ],
         )
       );
   }

@@ -1,6 +1,6 @@
 import 'package:tic_tac_toe/model/game_ai.dart';
 import 'package:tic_tac_toe/viewmodel/game_updates.dart';
-import 'game_grid.dart';
+import 'game_move.dart';
 import '../main.dart';
 
 ///
@@ -100,15 +100,4 @@ class GameRound {
       game.currentRound.p1turn = !game.currentRound.p1turn; 
     }
   }
-}
-
-///
-/// Defines logic for an individual move including player and position
-///
-class Move {
-  GameSquare sq;
-  String player;
-
-  ///Constructor: Takes a GameSquare and Player name as input
-  Move(this.sq, this.player);
 }

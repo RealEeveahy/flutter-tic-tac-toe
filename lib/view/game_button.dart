@@ -1,6 +1,7 @@
 //import 'dart:nativewrappers/_internal/vm/lib/ffi_patch.dart';
 import 'package:flutter/material.dart';
 import '../viewmodel/game_updates.dart';
+import 'package:tic_tac_toe/viewmodel/square_pointer.dart';
 
 class GameButton extends StatefulWidget {
   final SquarePointer parent;
