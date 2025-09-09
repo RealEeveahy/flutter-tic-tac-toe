@@ -1,3 +1,5 @@
+import 'package:tic_tac_toe/view/confetti.dart';
+import 'package:tic_tac_toe/view/game_screen.dart';
 import 'package:tic_tac_toe/view/user_data_label.dart';
 import 'package:tic_tac_toe/view/win_label.dart';
 import '../view/game_button.dart';
@@ -17,6 +19,7 @@ class GameUpdates
 {
   late WinLabel winnerLabel;
   late UserDataCount wins, losses, draws;
+  late GameScreen gameScreen;
 
   Widget NewStatLabel(String name)
   {
@@ -107,6 +110,10 @@ class GameUpdates
   void WinnerChanged(String result)
   {
     winnerLabel.myState.updateContent(result);
+    
+    //Turn the confetti on
+    if(result == "X") gameScreen.confettiController.myState.switchState = true;
+    else gameScreen.confettiController.myState.switchState = false;
   }
 
   WinLabel generateWinLabel()

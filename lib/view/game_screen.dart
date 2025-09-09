@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'confetti.dart';
 import 'package:tic_tac_toe/viewmodel/game_updates.dart';
 import 'package:tic_tac_toe/viewmodel/styles.dart';
 import 'package:tic_tac_toe/viewmodel/square_pointer.dart';
-//import 'confetti.dart';
 
 
 class GameScreen extends StatelessWidget {
-  const GameScreen({super.key});
+  GameScreen({super.key});
+
+  ConfettiController confettiController = ConfettiController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class GameScreen extends StatelessWidget {
         ),
         body: Stack(
           children: [
-            //ConfettiMachine(),
+            confettiController,
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
