@@ -1,6 +1,6 @@
-import 'package:tic_tac_toe/model/game_ai.dart';
+import 'package:tic_tac_toe/model/game_ai_model.dart';
 import 'package:tic_tac_toe/viewmodel/game_updates.dart';
-import 'game_move.dart';
+import 'game_move_model.dart';
 import '../main.dart';
 
 ///
@@ -17,7 +17,7 @@ class GameRound {
   GameRound();
   GameRound.aiMatch(this.AIPlayer);
 
-  bool GameFinished()
+  bool GameFinished({bool ui = true})
   {
     if(moveLog.length == 9) //grid has been filled
     {
@@ -25,15 +25,15 @@ class GameRound {
       if(check != "")
       {
         //if any player has won on the 9th move, return true and complete regular game won behaviour
-        RegisterWin(check);
+        RegisterWin(check, ui:ui);
         return true;
       }
       else
       {
         //if no player has won on the 9th move, return true and complete game draw behaviour
-        updateHandler.WinnerChanged("Draw!");
+        if(ui) updateHandler.WinnerChanged("Draw!");
         roundComplete = true;
-        game.data.Draw();
+        if(ui)game.data.Draw();
         return true;
       }
     }
@@ -42,7 +42,7 @@ class GameRound {
       String check = game.grid.CheckForWin();
       if(check != "") // a winner is found
       {
-        RegisterWin(check);
+        RegisterWin(check, ui:ui);
         return true;
       }
       else { return false; } //no winner yet
@@ -53,12 +53,12 @@ class GameRound {
     }
   }
 
-  void RegisterWin(String winner)
+  void RegisterWin(String winner, {bool ui = true})
   {
-    updateHandler.WinnerChanged(winner); // set the winner label 
-    winner == "X" ? game.data.Win() : game.data.Lose(); //update player stats
+    if(ui) updateHandler.WinnerChanged(winner); // set the winner label 
+    if(ui) winner == "X" ? game.data.Win() : game.data.Lose(); //update player stats
     roundComplete = true; // prevent more moves from being made
- }
+  }
 
   bool playerCanMove()
   {
@@ -81,16 +81,16 @@ class GameRound {
     }
   }
 
-  void UndoMove()
+  void UndoMove({bool ui = true})
   {
-    moveLog.last.sq.SetContent(""); //Set the content of the last assigned square to empty
+    moveLog.last.sq.SetContent("", ui: ui); //Set the content of the last assigned square to empty
     moveLog.removeLast(); //pop it from the move log
 
     //repeat the same logic again if player 2 is ai.
     //first run will remove the ai's move, second will remove the players
     if(AIPlayer != null)
     {
-      moveLog.last.sq.SetContent("");
+      moveLog.last.sq.SetContent("", ui: ui);
       moveLog.removeLast();
     }
     else{

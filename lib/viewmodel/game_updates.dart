@@ -1,10 +1,9 @@
-import 'package:tic_tac_toe/view/confetti.dart';
 import 'package:tic_tac_toe/view/game_screen.dart';
 import 'package:tic_tac_toe/view/user_data_label.dart';
 import 'package:tic_tac_toe/view/win_label.dart';
 import '../view/game_button.dart';
-import '../model/round.dart';
-import '../model/game_ai.dart';
+import '../model/round_model.dart';
+import '../model/game_ai_model.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 import 'square_pointer.dart';
@@ -61,7 +60,7 @@ class GameUpdates
     else
     {
       //vs ai match
-      game.currentRound = GameRound.aiMatch(ArtificialPlayer(difficulty));
+      game.currentRound = GameRound.aiMatch(ArtificialPlayer(difficulty, game.grid));
     }
   }
 

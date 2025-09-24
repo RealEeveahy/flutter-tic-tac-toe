@@ -1,4 +1,4 @@
-import '../model/game_square.dart';
+import '../model/game_square_model.dart';
 import '../view/game_button.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'game_square.dart';
+import 'game_square_model.dart';
 
 ///
 /// Defines logic for an individual move including player and position

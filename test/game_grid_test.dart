@@ -1,45 +1,36 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tic_tac_toe/model/game_grid.dart';
-import 'package:tic_tac_toe/model/game_square.dart';
+import 'package:tic_tac_toe/model/game_grid_model.dart';
 
 void main(){
-
-  GameGrid testGrid = GameGrid();
-  //default grid population (with no ui attachment)
-  int i = 0;
-  while(i < 9)
-  {
-    GameSquare.noUI(i, testGrid);
-  }
+  GameGrid grid = GameGrid.noUI();
   setUp(() {
-    testGrid.ClearAll();
+
   });
 
-  // Test 1: Grid has the correct number of squares
+  // Test GL: Grid has the correct number of squares
   test('grid length is equal to 9 with default instantiation', () {
     expect(
-      testGrid.grid.entries.length == 9,
-      isTrue,
+      grid.grid.entries.length,
+      9,
     );
   });
 
-  // Test 2: ReadAt() Returns the appropriate square content (X)
+  // Test GR: Read() Returns the appropriate square content (X)
     test('A given square contains the content that was applied to every square', () {
-      testGrid.grid.forEach((key, value) {
+      grid.grid.forEach((key, value) {
         value.content="X";
       }
       );
       expect(
-        testGrid.Read(1, 1) == "X",
+        grid.Read(1, 1) == "X",
         isTrue,
       );
   });
-  // Test 3: ReadAt() Returns the appropriate square content (empty)
+  // Test CAR: Read() Returns the appropriate square content (empty) after ClearAll()
     test('A given square is empty after contents were cleared', () {
-      testGrid.grid[(1,1)].content = "X";
-      testGrid.ClearAll();
+      grid.ClearAll(ui:false);
       expect(
-        testGrid.Read(1, 1) == "",
+        grid.Read(1, 1) == "",
         isTrue,
       );
   });

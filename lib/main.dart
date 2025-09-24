@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'view/splash.dart';
-import 'model/session.dart';
+import 'model/session_model.dart';
 
 late PlayerSession game;
 void main(){

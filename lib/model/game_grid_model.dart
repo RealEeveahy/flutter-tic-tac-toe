@@ -1,8 +1,22 @@
-import 'game_square.dart';
-
+import 'game_square_model.dart';
 
 class GameGrid {
   Map grid = <(int,int),GameSquare>{};
+
+  GameGrid()
+  {
+    /// necessary empty constructor so that noUi may exist for testing
+  }
+  GameGrid.noUI()
+  {
+    //default grid population (with no ui attachment)
+    int i = 0;
+    while(i < 9)
+    {
+      GameSquare.noUI(i, this);
+      i++;
+    }
+  }
 
   /// Add a square to the game grid at the appropriate position, used by the GameSquare constructor
   void AddToGrid(int x, int y, GameSquare sq)
@@ -10,10 +24,10 @@ class GameGrid {
     grid[(x,y)] = sq;
   }
   /// Clear all the squares within a game grid
-  void ClearAll()
+  void ClearAll({bool ui = true})
   {
     grid.forEach((key, value) {
-        value.SetContent("");
+        value.SetContent("", ui:ui);
       }
     );
   }
